@@ -4,8 +4,8 @@ import { RootLayout } from "./layout/RootLayout";
 // import { Marketplace } from "./pages/Marketplace";
 // import { ListingDetail } from "./pages/ListingDetail";
 // import { HustlerDashboard } from "./pages/HustlerDashboard";
-// import { BuyerDashboard } from "./pages/BuyerDashboard";
-// import { HustleForge } from "./pages/HustleForge";
+import { BuyerDashboard } from "./pages/BuyerDashboard";
+import { HustleForge } from "./pages/HustleForge";
 // import { SocialMediaManagement } from "./pages/SocialMediaManagement";
 // import { SignUp } from "./pages/SignUp";
 // import { Login } from "./pages/Login";
@@ -36,15 +36,15 @@ export const router = createBrowserRouter([
     //     Component: HustlerDashboard,
     //   },
 
-    //   {
-    //     path: "/dashboard/buyer",
-    //     Component: BuyerDashboard,
-    //   },
+      {
+        path: "/dashboard/buyer",
+        Component: BuyerDashboard,
+      },
 
-    //   {
-    //     path: "/hustleforge",
-    //     Component: HustleForge,
-    //   },
+      {
+        path: "/hustleforge",
+        Component: HustleForge,
+      },
 
     //   {
     //     path: "/social-media",

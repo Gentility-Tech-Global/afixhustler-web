@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router";
-import { LandingPage } from "./pages/LandingPage";
-import { RootLayout } from "./layout/RootLayout";
-// import { Marketplace } from "./pages/Marketplace";
-// import { ListingDetail } from "./pages/ListingDetail";
-// import { HustlerDashboard } from "./pages/HustlerDashboard";
-// import { BuyerDashboard } from "./pages/BuyerDashboard";
-// import { HustleForge } from "./pages/HustleForge";
-// import { SocialMediaManagement } from "./pages/SocialMediaManagement";
+import { LandingPage } from "./pages/LandingPage.tsx";
+import { RootLayout } from "./layout/RootLayout.tsx";
+import { Marketplace } from "./pages/MarketPlace.tsx";
+import { ListingDetail } from "./pages/ListingDetails.tsx";
+import { HustlerDashboard } from "./pages/HustlersDashboard.tsx";
+import { BuyerDashboard } from "./pages/BuyerDashboard.tsx";
+import { HustleForge } from "./pages/HustleForge.tsx";
+import { SocialMediaManagement } from "./pages/SocialMediaMgt.tsx";
 // import { SignUp } from "./pages/SignUp";
 // import { Login } from "./pages/Login";
 // import { NotFound } from "./pages/NotFound";
@@ -21,35 +21,35 @@ export const router = createBrowserRouter([
         element: <LandingPage />,
       },
 
-    //   {
-    //     path: "/marketplace",
-    //     Component: Marketplace,
-    //   },
+      {
+        path: "/marketplace",
+        Component: Marketplace,
+      },
 
-    //   {
-    //     path: "/listing/:id",
-    //     Component: ListingDetail,
-    //   },
+      {
+        path: "/listing/:id",
+        Component: ListingDetail,
+      },
 
-    //   {
-    //     path: "/dashboard/hustler",
-    //     Component: HustlerDashboard,
-    //   },
+      {
+        path: "/dashboard/hustler",
+        Component: HustlerDashboard,
+      },
 
-    //   {
-    //     path: "/dashboard/buyer",
-    //     Component: BuyerDashboard,
-    //   },
+      {
+        path: "/dashboard/buyer",
+        Component: BuyerDashboard,
+      },
 
-    //   {
-    //     path: "/hustleforge",
-    //     Component: HustleForge,
-    //   },
+      {
+        path: "/hustleforge",
+        Component: HustleForge,
+      },
 
-    //   {
-    //     path: "/social-media",
-    //     Component: SocialMediaManagement,
-    //   },
+      {
+        path: "/social-media",
+        Component: SocialMediaManagement,
+      },
 
     //   {
     //     path: "/signup",

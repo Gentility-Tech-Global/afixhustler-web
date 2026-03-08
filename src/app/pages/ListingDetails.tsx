@@ -52,7 +52,6 @@ export function ListingDetail() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* <Navbar /> */}
 
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
@@ -91,13 +90,17 @@ export function ListingDetail() {
           {/* Details */}
           <div>
             <div className="mb-4 flex flex-wrap gap-2">
-              <Badge variant="secondary">{listing.category === "commodity" ? "Product" : "Service"}</Badge>
-              {listing.tags.map((tag, idx) => (
+                {/* Updated badges – use new fields for consistency */}
+                <Badge variant="secondary">{listing.mainCategory}</Badge>
+                <Badge variant="outline">{listing.industry}</Badge>
+                <Badge variant="secondary">{listing.subcategory}</Badge>
+
+                {listing.tags.map((tag, idx) => (
                 <Badge key={idx} className="bg-green-600">{tag}</Badge>
-              ))}
-              <Badge variant="outline">
+                ))}
+                <Badge variant="outline">
                 {listing.availability === "available" ? "✓ Available" : "Out of Stock"}
-              </Badge>
+                </Badge>
             </div>
 
             <h1 className="mb-4 text-3xl font-bold">{listing.title}</h1>
@@ -169,7 +172,7 @@ export function ListingDetail() {
                 onClick={handleBooking}
                 disabled={listing.availability !== "available"}
               >
-                {listing.category === "service" ? "Book Service" : "Order Now"}
+                {listing.mainCategory === "Services" ? "Book Service" : "Order Now"}
               </Button>
               {/* ── ADD THE BOOST BUTTON HERE ── */}
                 <BoostButton 
@@ -213,7 +216,7 @@ export function ListingDetail() {
           <h2 className="mb-6 text-2xl font-bold">Similar Listings</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {mockListings
-              .filter((l) => l.id !== listing.id && l.category === listing.category)
+              .filter((l) => l.id !== listing.id && l.mainCategory === listing.mainCategory)
               .slice(0, 4)
               .map((item) => (
                 <Link key={item.id} to={`/listing/${item.id}`}>
@@ -278,7 +281,7 @@ export function ListingDetail() {
           <DialogHeader>
             <DialogTitle>Confirm Your Booking</DialogTitle>
             <DialogDescription>
-              You're about to {listing.category === "service" ? "book" : "order"}: {listing.title}
+              You're about to {listing.mainCategory === "Services" ? "book" : "order"}: {listing.title}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">

@@ -1,7 +1,8 @@
 export interface Listing {
   id: string;
   title: string;
-  category: 'commodity' | 'service';
+  industry: string;
+  mainCategory: "Products/Commodity" | "Services" | "Equipment" | "Skilled Labour";
   subcategory: string;
   price: number;
   description: string;
@@ -20,6 +21,27 @@ export interface Listing {
   reviews: number;
   tags: string[];
 }
+// Top-level categories
+export const industries = [
+    {id: "agriculture-farming", name: "Agriculture & Farming" },
+    {id: "housing-contruction", name: "Housing / Building / Construction" },
+    { id: "transport-mobility", name: "Transport & Mobility" },
+    { id: "automobile", name: "Automobile Industry" },
+    { id: "fashion-textiles", name: "Fashion & Textiles" },
+    { id: "food-catering", name: "Food & Catering" },
+    { id: "technology-digital", name: "Technology & Digital Services" },
+    { id: "education-training", name: "Education & Training" },
+    { id: "health-medical", name: "Health & Medical" },
+    { id: "beauty-personal-care", name: "Beauty & Personal Care" },
+    { id: "events-entertainment", name: "Events & Entertainment" },
+    { id: "real-estate-property", name: "Real Estate & Property" },
+    { id: "home-services", name: "Home Services" },
+    { id: "security-safety", name: "Security & Safety" },
+    { id: "manufacturing-industry", name: "Manufacturing & Industry" },
+    { id: "energy-utilities", name: "Energy & Utilities" },
+    { id: "finance-business", name: "Finance & Business Services" },
+    { id: "media-creative", name: "Media & Creative" },
+];
 
 export interface User {
   id: string;
@@ -44,7 +66,8 @@ export const mockListings: Listing[] = [
   {
     id: '1',
     title: 'Premium Aba Leather Shoes - Brown Oxford',
-    category: 'commodity',
+    industry: "Fashion & Textiles",
+    mainCategory: 'Products/Commodity',
     subcategory: 'Footwear',
     price: 15000,
     description: 'Handcrafted premium leather Oxford shoes from Aba. Made with 100% genuine leather, durable sole, and elegant finish. Perfect for corporate and casual wear.',
@@ -69,8 +92,9 @@ export const mockListings: Listing[] = [
   {
     id: '2',
     title: 'Fresh Cassava & Garri - Farm Direct',
-    category: 'commodity',
-    subcategory: 'Agriculture',
+    industry: 'Agriculture & Farming',
+    mainCategory: 'Products/Commodity',
+    subcategory: 'Cassava',
     price: 3500,
     description: 'Fresh cassava tubers and high-quality garri directly from the farm. 100% organic, no chemicals. Available in bulk for wholesalers.',
     images: [
@@ -93,7 +117,8 @@ export const mockListings: Listing[] = [
   {
     id: '3',
     title: 'Professional Plumbing Services',
-    category: 'service',
+    industry: 'Housing / Building / Constructions',
+    mainCategory: 'Services',
     subcategory: 'Plumbing',
     price: 5000,
     description: 'Expert plumbing services for residential and commercial properties. Pipe repairs, installations, drainage solutions, and emergency services available.',
@@ -116,7 +141,8 @@ export const mockListings: Listing[] = [
   {
     id: '4',
     title: 'Custom Tailoring - Aso Ebi & Native Wear',
-    category: 'service',
+    industry: 'Fashion & Textiles',
+    mainCategory: 'Services',
     subcategory: 'Tailoring',
     price: 8000,
     description: 'Professional tailoring for all occasions. Specializing in aso ebi, native wear, corporate attire, and alterations. Fast turnaround time.',
@@ -139,7 +165,8 @@ export const mockListings: Listing[] = [
   {
     id: '5',
     title: 'Electrician - Installation & Repairs',
-    category: 'service',
+    industry: 'Housing / Building / Construction',
+    mainCategory: 'Services',
     subcategory: 'Electrical',
     price: 6000,
     description: 'Certified electrician for all electrical works. House wiring, solar installation, generator repairs, and electrical maintenance.',
@@ -162,7 +189,8 @@ export const mockListings: Listing[] = [
   {
     id: '6',
     title: 'Handmade Leather Bags - Aba Collection',
-    category: 'commodity',
+    industry: 'Fashion & Textiles',
+    mainCategory: 'Products/Commodity',
     subcategory: 'Fashion',
     price: 12000,
     description: 'Stylish handmade leather bags from Aba. Available in various colors and sizes. Durable, fashionable, and affordable.',

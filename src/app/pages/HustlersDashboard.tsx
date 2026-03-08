@@ -45,8 +45,11 @@ export function HustlerDashboard() {
 
   // Add Listing form states
   const [newListingIndustry, setNewListingIndustry] = useState("");
+  const [newListingCustomIndustry, setNewListingCustomIndustry] = useState(""); // for "Others"
   const [newListingMainCat, setNewListingMainCat] = useState("");
+  const [newListingCustomMainCat, setNewListingCustomMainCat] = useState("");
   const [newListingSubcat, setNewListingSubcat] = useState("");
+  const [newListingCustomSubcat, setNewListingCustomSubcat] = useState("");
   const [newListingTitle, setNewListingTitle] = useState("");
   const [newListingPrice, setNewListingPrice] = useState("");
   const [newListingQuantity, setNewListingQuantity] = useState("");
@@ -54,23 +57,38 @@ export function HustlerDashboard() {
   const [newListingDescription, setNewListingDescription] = useState("");
   const [newListingAvailable, setNewListingAvailable] = useState(true);
 
-  const mainCategories = getMainCategories(newListingIndustry);
-  const subCategories = getSubCategories(newListingIndustry, newListingMainCat);
+  const isOthers = newListingIndustry === "Others";
+
+  const effectiveIndustry = isOthers ? newListingCustomIndustry.trim() : newListingIndustry;
+  const mainCategories = isOthers ? [] : getMainCategories(newListingIndustry);
+  const subCategories = isOthers ? [] : getSubCategories(newListingIndustry, newListingMainCat);
 
   const handleCreateListing = () => {
-    if (!newListingIndustry || !newListingMainCat || !newListingSubcat || !newListingTitle.trim() || !newListingPrice) {
-      toast.error("Please fill all required fields");
+    // Always required
+    if (!effectiveIndustry || !newListingTitle.trim() || !newListingPrice) {
+      toast.error("Please fill all required fields (Industry, Title, Price)");
+      return;
+    }
+
+    // For non-Others: require Main Category & Sub Category
+    if (!isOthers && (!newListingMainCat || !newListingSubcat)) {
+      toast.error("Please select Main Category and Sub Category");
       return;
     }
 
     toast.success("Listing created successfully! (Mock — backend integration pending)", {
-      description: `${newListingTitle} • ${newListingIndustry} • ${newListingMainCat} • ${newListingSubcat}`,
+      description: `${newListingTitle} • ${effectiveIndustry} • ${
+        isOthers ? newListingCustomMainCat : newListingMainCat
+      } • ${isOthers ? newListingCustomSubcat : newListingSubcat}`,
     });
 
-    // Reset form after success (optional – comment out if you prefer to keep values)
+    // Reset form
     setNewListingIndustry("");
+    setNewListingCustomIndustry("");
     setNewListingMainCat("");
+    setNewListingCustomMainCat("");
     setNewListingSubcat("");
+    setNewListingCustomSubcat("");
     setNewListingTitle("");
     setNewListingPrice("");
     setNewListingQuantity("");
@@ -126,51 +144,86 @@ export function HustlerDashboard() {
                             {ind.name}
                           </SelectItem>
                         ))}
+                        <SelectItem value="Others">Others (type your own)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
+
+                  {/* Custom Industry (only shown when Others selected) */}
+                  {isOthers && (
+                    <div>
+                      <Label>Custom Industry Name *</Label>
+                      <Input
+                        placeholder="e.g., Waste Recycling, Event Planning"
+                        value={newListingCustomIndustry}
+                        onChange={(e) => setNewListingCustomIndustry(e.target.value)}
+                      />
+                    </div>
+                  )}
 
                   {/* Main Category */}
-                  <div>
-                    <Label>Main Category *</Label>
-                    <Select
-                      value={newListingMainCat}
-                      onValueChange={setNewListingMainCat}
-                      disabled={!newListingIndustry}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select main category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {mainCategories.map((cat) => (
-                          <SelectItem key={cat} value={cat}>
-                            {cat}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {!isOthers ? (
+                    <div>
+                      <Label>Main Category *</Label>
+                      <Select
+                        value={newListingMainCat}
+                        onValueChange={setNewListingMainCat}
+                        disabled={!newListingIndustry}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select main category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mainCategories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                              {cat}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ) : (
+                    <div>
+                      <Label>Main Category (optional)</Label>
+                      <Input
+                        placeholder="e.g., Products, Services, Rentals"
+                        value={newListingCustomMainCat}
+                        onChange={(e) => setNewListingCustomMainCat(e.target.value)}
+                      />
+                    </div>
+                  )}
 
                   {/* Sub Category */}
-                  <div>
-                    <Label>Sub Category *</Label>
-                    <Select
-                      value={newListingSubcat}
-                      onValueChange={setNewListingSubcat}
-                      disabled={!newListingMainCat}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select sub category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {subCategories.map((sub) => (
-                          <SelectItem key={sub} value={sub}>
-                            {sub}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {!isOthers ? (
+                    <div>
+                      <Label>Sub Category *</Label>
+                      <Select
+                        value={newListingSubcat}
+                        onValueChange={setNewListingSubcat}
+                        disabled={!newListingMainCat}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select sub category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {subCategories.map((sub) => (
+                            <SelectItem key={sub} value={sub}>
+                              {sub}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ) : (
+                    <div>
+                      <Label>Sub Category (optional)</Label>
+                      <Input
+                        placeholder="e.g., Crop Farming, Home Cleaning, Car Rental"
+                        value={newListingCustomSubcat}
+                        onChange={(e) => setNewListingCustomSubcat(e.target.value)}
+                      />
+                    </div>
+                  )}
 
                   {/* Title */}
                   <div>
@@ -457,7 +510,7 @@ export function HustlerDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Earnings */}
+          {/* Earnings Tab */}
           <TabsContent value="earnings" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-3">
               <Card>
@@ -520,7 +573,7 @@ export function HustlerDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Analytics */}
+          {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <Card>
@@ -569,7 +622,7 @@ export function HustlerDashboard() {
             </div>
           </TabsContent>
 
-          {/* Account */}
+          {/* Account Tab */}
           <TabsContent value="account" className="space-y-6">
             <Card>
               <CardHeader>

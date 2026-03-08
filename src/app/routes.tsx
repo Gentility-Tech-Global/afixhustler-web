@@ -6,7 +6,7 @@ import { ListingDetail } from "./pages/ListingDetails.tsx";
 import { HustlerDashboard } from "./pages/HustlersDashboard.tsx";
 import { BuyerDashboard } from "./pages/BuyerDashboard.tsx";
 import { HustleForge } from "./pages/HustleForge.tsx";
-// import { SocialMediaManagement } from "./pages/SocialMediaManagement";
+import { SocialMediaManagement } from "./pages/SocialMediaMgt.tsx";
 // import { SignUp } from "./pages/SignUp";
 // import { Login } from "./pages/Login";
 // import { NotFound } from "./pages/NotFound";
@@ -46,10 +46,10 @@ export const router = createBrowserRouter([
         Component: HustleForge,
       },
 
-    //   {
-    //     path: "/social-media",
-    //     Component: SocialMediaManagement,
-    //   },
+      {
+        path: "/social-media",
+        Component: SocialMediaManagement,
+      },
 
     //   {
     //     path: "/signup",

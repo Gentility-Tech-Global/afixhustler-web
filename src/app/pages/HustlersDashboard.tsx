@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Footer } from "../components/footer.tsx";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
@@ -8,10 +8,18 @@ import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { Badge } from "../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Switch } from "../components/ui/switch.tsx";
+import { Switch } from "../components/ui/switch";
 import { currentUser, mockListings, mockEarnings } from "../data/MockData.tsx";
+import { getMainCategories, getSubCategories, marketCategories } from "../data/marketCategories.ts";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -28,7 +36,6 @@ import {
   Package,
   DollarSign,
   Star,
-//   Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,9 +43,44 @@ export function HustlerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const myListings = mockListings.filter((l) => l.hustler.id === currentUser.id);
 
+  // Add Listing form states
+  const [newListingIndustry, setNewListingIndustry] = useState("");
+  const [newListingMainCat, setNewListingMainCat] = useState("");
+  const [newListingSubcat, setNewListingSubcat] = useState("");
+  const [newListingTitle, setNewListingTitle] = useState("");
+  const [newListingPrice, setNewListingPrice] = useState("");
+  const [newListingQuantity, setNewListingQuantity] = useState("");
+  const [newListingUnit, setNewListingUnit] = useState("");
+  const [newListingDescription, setNewListingDescription] = useState("");
+  const [newListingAvailable, setNewListingAvailable] = useState(true);
+
+  const mainCategories = getMainCategories(newListingIndustry);
+  const subCategories = getSubCategories(newListingIndustry, newListingMainCat);
+
+  const handleCreateListing = () => {
+    if (!newListingIndustry || !newListingMainCat || !newListingSubcat || !newListingTitle.trim() || !newListingPrice) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    toast.success("Listing created successfully! (Mock — backend integration pending)", {
+      description: `${newListingTitle} • ${newListingIndustry} • ${newListingMainCat} • ${newListingSubcat}`,
+    });
+
+    // Reset form after success (optional – comment out if you prefer to keep values)
+    setNewListingIndustry("");
+    setNewListingMainCat("");
+    setNewListingSubcat("");
+    setNewListingTitle("");
+    setNewListingPrice("");
+    setNewListingQuantity("");
+    setNewListingUnit("");
+    setNewListingDescription("");
+    setNewListingAvailable(true);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -53,6 +95,7 @@ export function HustlerDashboard() {
                 HustleForge AI
               </Button>
             </Link>
+
             <Dialog>
               <DialogTrigger asChild>
                 <Button className="bg-green-600 hover:bg-green-700">
@@ -60,69 +103,149 @@ export function HustlerDashboard() {
                   Add Listing
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-h-[90vh] overflow-y-auto">
+
+              <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Create New Listing</DialogTitle>
-                  <DialogDescription>Add a new product or service to the marketplace</DialogDescription>
+                  <DialogDescription>
+                    Add your product, service, equipment or skilled labor to the marketplace
+                  </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4">
+
+                <div className="space-y-5 py-2">
+                  {/* Industry */}
                   <div>
-                    <Label>Listing Type</Label>
-                    <Select>
+                    <Label>Industry *</Label>
+                    <Select value={newListingIndustry} onValueChange={setNewListingIndustry}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
+                        <SelectValue placeholder="Select industry" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="commodity">Product/Commodity</SelectItem>
-                        <SelectItem value="service">Service</SelectItem>
+                        {marketCategories.map((ind) => (
+                          <SelectItem key={ind.name} value={ind.name}>
+                            {ind.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
+
+                  {/* Main Category */}
                   <div>
-                    <Label>Title</Label>
-                    <Input placeholder="e.g., Premium Leather Shoes" />
-                  </div>
-                  <div>
-                    <Label>Category</Label>
-                    <Select>
+                    <Label>Main Category *</Label>
+                    <Select
+                      value={newListingMainCat}
+                      onValueChange={setNewListingMainCat}
+                      disabled={!newListingIndustry}
+                    >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
+                        <SelectValue placeholder="Select main category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="footwear">Footwear</SelectItem>
-                        <SelectItem value="agriculture">Agriculture</SelectItem>
-                        <SelectItem value="fashion">Fashion</SelectItem>
-                        <SelectItem value="plumbing">Plumbing</SelectItem>
-                        <SelectItem value="electrical">Electrical</SelectItem>
+                        {mainCategories.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
+
+                  {/* Sub Category */}
                   <div>
-                    <Label>Price (₦)</Label>
-                    <Input type="number" placeholder="15000" />
+                    <Label>Sub Category *</Label>
+                    <Select
+                      value={newListingSubcat}
+                      onValueChange={setNewListingSubcat}
+                      disabled={!newListingMainCat}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select sub category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {subCategories.map((sub) => (
+                          <SelectItem key={sub} value={sub}>
+                            {sub}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
+
+                  {/* Title */}
                   <div>
-                    <Label>Quantity Available</Label>
-                    <Input type="number" placeholder="25" />
+                    <Label>Title / Specific Name *</Label>
+                    <Input
+                      placeholder="e.g., White Yam (Large), Broiler Chicken (Live), 50kg Bag Rice"
+                      value={newListingTitle}
+                      onChange={(e) => setNewListingTitle(e.target.value)}
+                    />
                   </div>
+
+                  {/* Price */}
+                  <div>
+                    <Label>Price (₦) *</Label>
+                    <Input
+                      type="number"
+                      placeholder="15000"
+                      value={newListingPrice}
+                      onChange={(e) => setNewListingPrice(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Quantity + Unit */}
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <Label>Quantity Available (optional)</Label>
+                      <Input
+                        type="number"
+                        placeholder="25"
+                        value={newListingQuantity}
+                        onChange={(e) => setNewListingQuantity(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>Unit (optional)</Label>
+                      <Input
+                        placeholder="bags, pieces, herds, kg, crates, litres, etc."
+                        value={newListingUnit}
+                        onChange={(e) => setNewListingUnit(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Description */}
                   <div>
                     <Label>Description</Label>
-                    <Textarea placeholder="Describe your product or service..." rows={4} />
+                    <Textarea
+                      placeholder="Detailed description of what you're offering..."
+                      rows={4}
+                      value={newListingDescription}
+                      onChange={(e) => setNewListingDescription(e.target.value)}
+                    />
                   </div>
+
+                  {/* Images */}
                   <div>
                     <Label>Upload Images</Label>
                     <div className="mt-2 flex h-32 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 hover:border-green-600">
                       <div className="text-center">
                         <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                        <p className="mt-2 text-sm text-gray-600">Click to upload images</p>
+                        <p className="mt-2 text-sm text-gray-600">Click or drag images here</p>
                       </div>
                     </div>
                   </div>
+
+                  {/* Availability */}
                   <div className="flex items-center justify-between">
-                    <Label>Availability Status</Label>
-                    <Switch defaultChecked />
+                    <Label>Available for Order</Label>
+                    <Switch checked={newListingAvailable} onCheckedChange={setNewListingAvailable} />
                   </div>
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
+
+                  <Button
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    onClick={handleCreateListing}
+                  >
                     Create Listing
                   </Button>
                 </div>
@@ -154,7 +277,9 @@ export function HustlerDashboard() {
                 <div>
                   <p className="text-sm text-gray-600">Active Listings</p>
                   <p className="text-2xl font-bold">{myListings.length}</p>
-                  <p className="text-xs text-gray-500">{myListings.filter(l => l.availability === 'available').length} available</p>
+                  <p className="text-xs text-gray-500">
+                    {myListings.filter((l) => l.availability === "available").length} available
+                  </p>
                 </div>
                 <div className="rounded-full bg-blue-100 p-3">
                   <Package className="h-6 w-6 text-blue-600" />
@@ -187,7 +312,9 @@ export function HustlerDashboard() {
                 <div>
                   <p className="text-sm text-gray-600">This Month</p>
                   <p className="text-2xl font-bold">₦{mockEarnings.thisMonth.toLocaleString()}</p>
-                  <p className="text-xs text-gray-500">{mockEarnings.transactions.filter(t => t.status === 'pending').length} pending</p>
+                  <p className="text-xs text-gray-500">
+                    {mockEarnings.transactions.filter((t) => t.status === "pending").length} pending
+                  </p>
                 </div>
                 <div className="rounded-full bg-purple-100 p-3">
                   <TrendingUp className="h-6 w-6 text-purple-600" />
@@ -197,7 +324,7 @@ export function HustlerDashboard() {
           </Card>
         </div>
 
-        {/* Main Content Tabs */}
+        {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-6 grid w-full grid-cols-2 lg:w-auto lg:grid-cols-5">
             <TabsTrigger value="overview">
@@ -222,7 +349,7 @@ export function HustlerDashboard() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Overview Tab */}
+          {/* Overview */}
           <TabsContent value="overview" className="space-y-6">
             <Card>
               <CardHeader>
@@ -232,7 +359,10 @@ export function HustlerDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {mockEarnings.transactions.slice(0, 5).map((txn) => (
-                    <div key={txn.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                    <div
+                      key={txn.id}
+                      className="flex items-center justify-between border-b pb-4 last:border-0"
+                    >
                       <div className="flex items-center gap-3">
                         <div className="rounded-full bg-green-100 p-2">
                           <DollarSign className="h-5 w-5 text-green-600" />
@@ -244,7 +374,7 @@ export function HustlerDashboard() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-green-600">₦{txn.amount.toLocaleString()}</p>
-                        <Badge variant={txn.status === 'completed' ? 'default' : 'secondary'} className="mt-1">
+                        <Badge variant={txn.status === "completed" ? "default" : "secondary"}>
                           {txn.status}
                         </Badge>
                       </div>
@@ -255,17 +385,20 @@ export function HustlerDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Listings Tab */}
+          {/* Listings */}
           <TabsContent value="listings" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>My Listings ({myListings.length})</CardTitle>
-                <CardDescription>Manage your products and services</CardDescription>
+                <CardDescription>Manage your products, services, equipment and skilled labor offerings</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {myListings.map((listing) => (
-                    <div key={listing.id} className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div
+                      key={listing.id}
+                      className="flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+                    >
                       <div className="flex gap-4">
                         <img
                           src={listing.images[0]}
@@ -274,19 +407,27 @@ export function HustlerDashboard() {
                         />
                         <div>
                           <h4 className="font-semibold">{listing.title}</h4>
-                          <p className="text-sm text-gray-600">{listing.subcategory}</p>
-                          <p className="mt-1 font-bold text-green-600">₦{listing.price.toLocaleString()}</p>
+                          <div className="mt-1 flex flex-wrap gap-2 text-sm">
+                            <Badge variant="outline">{listing.industry}</Badge>
+                            <Badge variant="secondary">{listing.mainCategory}</Badge>
+                            <Badge>{listing.subcategory}</Badge>
+                            {listing.quantity && listing.unit && (
+                              <Badge variant="outline">
+                                {listing.quantity} {listing.unit}
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="mt-1 font-bold text-green-600">
+                            ₦{listing.price.toLocaleString()}
+                          </p>
                           <div className="mt-2 flex items-center gap-2">
-                            <Badge variant={listing.availability === 'available' ? 'default' : 'secondary'}>
+                            <Badge variant={listing.availability === "available" ? "default" : "secondary"}>
                               {listing.availability}
                             </Badge>
-                            {listing.quantity && (
-                              <span className="text-xs text-gray-500">{listing.quantity} available</span>
-                            )}
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <Button variant="outline" size="sm">
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -295,7 +436,11 @@ export function HustlerDashboard() {
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
-                        <Button variant="outline" size="sm" onClick={() => toast.success("Listing deleted")}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => toast.success("Listing deleted")}
+                        >
                           <Trash2 className="h-4 w-4 text-red-600" />
                         </Button>
                         <Link to="/hustleforge">
@@ -312,7 +457,7 @@ export function HustlerDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Earnings Tab */}
+          {/* Earnings */}
           <TabsContent value="earnings" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-3">
               <Card>
@@ -320,7 +465,9 @@ export function HustlerDashboard() {
                   <CardTitle>Total Earnings</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold text-green-600">₦{mockEarnings.totalEarnings.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-green-600">
+                    ₦{mockEarnings.totalEarnings.toLocaleString()}
+                  </p>
                 </CardContent>
               </Card>
               <Card>
@@ -328,7 +475,9 @@ export function HustlerDashboard() {
                   <CardTitle>Pending</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold text-yellow-600">₦{mockEarnings.pending.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-yellow-600">
+                    ₦{mockEarnings.pending.toLocaleString()}
+                  </p>
                 </CardContent>
               </Card>
               <Card>
@@ -336,7 +485,9 @@ export function HustlerDashboard() {
                   <CardTitle>Completed</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold text-gray-900">₦{mockEarnings.completed.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-gray-900">
+                    ₦{mockEarnings.completed.toLocaleString()}
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -348,14 +499,17 @@ export function HustlerDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {mockEarnings.transactions.map((txn) => (
-                    <div key={txn.id} className="flex items-center justify-between border-b pb-3 last:border-0">
+                    <div
+                      key={txn.id}
+                      className="flex items-center justify-between border-b pb-3 last:border-0"
+                    >
                       <div>
                         <p className="font-medium">{txn.item}</p>
                         <p className="text-sm text-gray-500">{txn.date}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold">₦{txn.amount.toLocaleString()}</p>
-                        <Badge variant={txn.status === 'completed' ? 'default' : 'secondary'}>
+                        <Badge variant={txn.status === "completed" ? "default" : "secondary"}>
                           {txn.status}
                         </Badge>
                       </div>
@@ -366,7 +520,7 @@ export function HustlerDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Analytics Tab */}
+          {/* Analytics */}
           <TabsContent value="analytics" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <Card>
@@ -415,7 +569,7 @@ export function HustlerDashboard() {
             </div>
           </TabsContent>
 
-          {/* Account Tab */}
+          {/* Account */}
           <TabsContent value="account" className="space-y-6">
             <Card>
               <CardHeader>
@@ -440,7 +594,7 @@ export function HustlerDashboard() {
                 </div>
                 <div>
                   <Label>Bio</Label>
-                  <Textarea defaultValue={currentUser.bio} rows={3} />
+                  <Textarea defaultValue={currentUser.bio ?? ""} rows={3} />
                 </div>
                 <div>
                   <Label>Location</Label>
@@ -466,15 +620,15 @@ export function HustlerDashboard() {
               <CardContent className="space-y-4">
                 <div>
                   <Label>Bank Name</Label>
-                  <Input defaultValue={currentUser.bankDetails?.bankName} />
+                  <Input defaultValue={currentUser.bankDetails?.bankName ?? ""} />
                 </div>
                 <div>
                   <Label>Account Number</Label>
-                  <Input defaultValue={currentUser.bankDetails?.accountNumber} />
+                  <Input defaultValue={currentUser.bankDetails?.accountNumber ?? ""} />
                 </div>
                 <div>
                   <Label>Account Name</Label>
-                  <Input defaultValue={currentUser.bankDetails?.accountName} disabled />
+                  <Input defaultValue={currentUser.bankDetails?.accountName ?? ""} disabled />
                 </div>
                 <div className="rounded-lg bg-green-50 p-4">
                   <div className="flex items-start gap-2">

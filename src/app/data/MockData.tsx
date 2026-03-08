@@ -17,6 +17,7 @@ export interface Listing {
   };
   availability: 'available' | 'out_of_stock' | 'unavailable';
   quantity?: number;
+  unit: string;
   rating: number;
   reviews: number;
   tags: string[];
@@ -85,6 +86,7 @@ export const mockListings: Listing[] = [
     },
     availability: 'available',
     quantity: 25,
+    unit: 'pairs',
     rating: 4.8,
     reviews: 47,
     tags: ['Made-in-Naija', 'Premium', 'Handcrafted'],
@@ -110,6 +112,7 @@ export const mockListings: Listing[] = [
     },
     availability: 'available',
     quantity: 100,
+    unit: '',
     rating: 4.6,
     reviews: 32,
     tags: ['Organic', 'Farm Direct', 'Bulk Available'],
@@ -134,6 +137,7 @@ export const mockListings: Listing[] = [
       verified: true,
     },
     availability: 'available',
+    unit: '',
     rating: 4.9,
     reviews: 68,
     tags: ['24/7 Available', 'Licensed', 'Emergency Service'],
@@ -158,6 +162,7 @@ export const mockListings: Listing[] = [
       verified: true,
     },
     availability: 'available',
+    unit: '',
     rating: 4.7,
     reviews: 95,
     tags: ['Fast Delivery', 'Custom Design', 'Alterations'],
@@ -182,6 +187,7 @@ export const mockListings: Listing[] = [
       verified: true,
     },
     availability: 'available',
+    unit: '',
     rating: 4.8,
     reviews: 54,
     tags: ['Certified', 'Solar Expert', 'Generator Repairs'],
@@ -207,6 +213,7 @@ export const mockListings: Listing[] = [
     },
     availability: 'available',
     quantity: 15,
+    unit: '',
     rating: 4.5,
     reviews: 28,
     tags: ['Made-in-Naija', 'Handmade', 'Fashion'],

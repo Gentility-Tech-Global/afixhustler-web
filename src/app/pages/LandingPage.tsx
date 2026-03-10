@@ -137,7 +137,7 @@ export function LandingPage() {
             </div>
             <div className="relative">
               <img
-                src="public/header-banner.jpeg"
+                src="/Hero-banner.jpg"
                 alt="Nigerian entrepreneur"
                 className="rounded-2xl shadow-2xl object-cover w-full h-auto"
               />

@@ -7,8 +7,8 @@ import { HustlerDashboard } from "./pages/HustlersDashboard.tsx";
 import { BuyerDashboard } from "./pages/BuyerDashboard.tsx";
 import { HustleForge } from "./pages/HustleForge.tsx";
 import { SocialMediaManagement } from "./pages/SocialMediaMgt.tsx";
-// import { SignUp } from "./pages/SignUp";
-// import { Login } from "./pages/Login";
+import { SignUp } from "./pages/SignUp.tsx";
+import { Login } from "./pages/Login";
 // import { NotFound } from "./pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -51,15 +51,15 @@ export const router = createBrowserRouter([
         Component: SocialMediaManagement,
       },
 
-    //   {
-    //     path: "/signup",
-    //     Component: SignUp,
-    //   },
+      {
+        path: "/signup",
+        Component: SignUp,
+      },
 
-    //   {
-    //     path: "/login",
-    //     Component: Login,
-    //   },
+      {
+        path: "/login",
+        Component: Login,
+      },
 
       {
         path: "*",

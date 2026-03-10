@@ -137,11 +137,11 @@ export function LandingPage() {
             </div>
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1723221907187-3e88c1d74b99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxOaWdlcmlhbiUyMGVudHJlcHJlbmV1ciUyMGJ1c2luZXNzJTIwb3duZXJ8ZW58MXx8fHwxNzcyNTU5NTY5fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                src="public/header-banner.jpeg"
                 alt="Nigerian entrepreneur"
-                className="rounded-2xl shadow-2xl"
+                className="rounded-2xl shadow-2xl object-cover w-full h-auto"
               />
-              <div className="absolute -bottom-6 -left-6 rounded-xl bg-white p-4 shadow-lg">
+              <div className="absolute -bottom-17 -left-6 rounded-xl bg-white p-4 shadow-lg">
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                     <TrendingUp className="h-6 w-6 text-green-600" />

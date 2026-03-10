@@ -133,6 +133,17 @@
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
   */
 
+/* tailwind.config.ts or globals.css */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;          /* IE and Edge */
+    scrollbar-width: none;             /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;                     /* Chrome, Safari, Opera */
+  }
+}
+
   html {
     font-size: var(--font-size);
   }

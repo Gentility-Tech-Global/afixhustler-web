@@ -94,30 +94,55 @@ export function Marketplace() {
           </div>
 
           {/* Tabs for main category type */}
-          <Tabs value={listingType} onValueChange={(v) => setListingType(v as any)} className="w-full">
-            <TabsList className="grid w-full max-w-xl grid-cols-5">
-              <TabsTrigger value="all">
-                <Grid className="mr-2 h-4 w-4" />
+            <Tabs value={listingType} onValueChange={(v) => setListingType(v as any)} className="w-full">
+            <TabsList 
+                className={`
+                flex flex-wrap justify-center gap-2 sm:gap-3 
+                max-w-4xl mx-auto 
+                md:flex-nowrap md:justify-center md:gap-4 lg:gap-6
+                `}
+            >
+                <TabsTrigger 
+                value="all" 
+                className="text-xs sm:text-sm px-3 sm:px-5 py-1.5 sm:py-2 whitespace-nowrap shrink-0"
+                >
+                <Grid className="mr-1.5 h-4 w-4 sm:mr-2" />
                 All
-              </TabsTrigger>
-              <TabsTrigger value="Products">
-                <ShoppingCart className="mr-2 h-4 w-4" />
+                </TabsTrigger>
+                
+                <TabsTrigger 
+                value="Products" 
+                className="text-xs sm:text-sm px-3 sm:px-5 py-1.5 sm:py-2 whitespace-nowrap shrink-0"
+                >
+                <ShoppingCart className="mr-1.5 h-4 w-4 sm:mr-2" />
                 Products
-              </TabsTrigger>
-              <TabsTrigger value="Services">
-                <Wrench className="mr-2 h-4 w-4" />
+                </TabsTrigger>
+                
+                <TabsTrigger 
+                value="Services" 
+                className="text-xs sm:text-sm px-3 sm:px-5 py-1.5 sm:py-2 whitespace-nowrap shrink-0"
+                >
+                <Wrench className="mr-1.5 h-4 w-4 sm:mr-2" />
                 Services
-              </TabsTrigger>
-              <TabsTrigger value="Equipment">
-                <Briefcase className="mr-2 h-4 w-4" />
+                </TabsTrigger>
+                
+                <TabsTrigger 
+                value="Equipment" 
+                className="text-xs sm:text-sm px-3 sm:px-5 py-1.5 sm:py-2 whitespace-nowrap shrink-0"
+                >
+                <Briefcase className="mr-1.5 h-4 w-4 sm:mr-2" />
                 Equipment
-              </TabsTrigger>
-              <TabsTrigger value="Skilled Labor">
-                <Users className="mr-2 h-4 w-4" />
+                </TabsTrigger>
+                
+                <TabsTrigger 
+                value="Skilled Labor" 
+                className="text-xs sm:text-sm px-3 sm:px-5 py-1.5 sm:py-2 whitespace-nowrap shrink-0"
+                >
+                <Users className="mr-1.5 h-4 w-4 sm:mr-2" />
                 Skilled Labor
-              </TabsTrigger>
+                </TabsTrigger>
             </TabsList>
-          </Tabs>
+            </Tabs>
         </div>
 
         {/* Results Count */}
